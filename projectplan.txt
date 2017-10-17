@@ -1,0 +1,9 @@
+Title
+
+Class_1
+    -str privateString
+    +str getPrivateString()
+    +str publicString
+    -int privateInt
+    +int getPrivateInt()
+    +vec<int> publicIntVector

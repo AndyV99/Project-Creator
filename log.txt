@@ -1,0 +1,29 @@
+[-----BEGIN LOAD CONFIG-----]
+	[---loadConfig()---]
+		LINE: String: -str=std::string-<string>
+			NAME: String
+			TYPE: str
+			TYPECODE: std::string
+			DEPENDANCY: <string>
+		LINE: Vector<T>: -vec<type>=std::vector<type>-<vector>
+			NAME: Vector<T>
+			TYPE: vec<type>
+			TYPECODE: std::vector<type>
+			DEPENDANCY: <vector>
+		LINE: Integer: -int=int
+			NAME: Integer
+			TYPE: int
+			TYPECODE: int
+			NO DEPENDANCY
+		LINE: Float: -flt=float
+			NAME: Float
+			TYPE: flt
+			TYPECODE: float
+			NO DEPENDANCY
+		LINE: Double: -dbl=double
+			NAME: Double
+			TYPE: dbl
+			TYPECODE: double
+			NO DEPENDANCY
+[-----BEGIN PARSE-----]
+	PARSER OBJECT CONSTRUCTED
