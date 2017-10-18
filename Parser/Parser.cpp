@@ -41,25 +41,6 @@ void Parser::parseFile()
                     /* code */
                 }
             }
-
-            /*
-            //if 6 to current config var length is equal to the config type
-            for (int i = 0; i < config->getConfigSettings(); i++)
-            { //for each config setting
-                bool stillSame == true;
-                for (int j = 0; j < config->getConfigSettings()[i].type && stillSame; j++)
-                { //for each character in configsetting.type
-                    if(line[5+j] != config->getConfigSettings()[i].type[j])
-                    { //if any 2 characters aren't the same
-                        stillSame = false;
-                    }
-                }
-                if(stillSame)
-                { //if all of the caracters are the same
-
-                }
-            }
-            */
         }
         else
         { //whitespace
