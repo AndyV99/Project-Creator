@@ -23,7 +23,8 @@ int main(int argc, char const *argv[]) {
 
 
     (*LOG) << "[-----BEGIN PARSE-----]" << '\n';
-    Parser* parser = new Parser(LOG, projectPlanFile, configFile);
+    Parser* parser = new Parser(LOG, projectPlanFile, configLoader);
+    parser->parseFile();
 
 
     LOG->close();

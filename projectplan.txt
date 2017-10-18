@@ -3,6 +3,7 @@ Title
 Class_1
     -str privateString
     +str getPrivateString()
+    +void setPrivateString(str value)
     +str publicString
     -int privateInt
     +int getPrivateInt()

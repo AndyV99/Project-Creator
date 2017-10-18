@@ -3,3 +3,4 @@ Vector<T>: -vec<type>=std::vector<type>-<vector>
 Integer: -int=int
 Float: -flt=float
 Double: -dbl=double
+Void : -void=void

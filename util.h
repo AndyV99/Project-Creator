@@ -11,12 +11,13 @@ namespace PCStructs {
         std::string name;
         std::string type;
         std::string typeCode;
+        std::string dependancy;
     };
 
     struct clsFunction
     {
         std::string name;
-        std::string retrunType;
+        std::string returnType;
         std::string returnTypeCode;
         std::vector<boost::shared_ptr<clsVar> > functionVars;
     };
@@ -31,10 +32,11 @@ namespace PCStructs {
     {
         std::string name;
         myCls* parent;
-        std::vector<boost::shared_ptr<clsVar> > publicVars;
-        std::vector<boost::shared_ptr<clsVar> > privateVars;
-        std::vector<boost::shared_ptr<clsFunction> > functions;
-        std::vector<boost::shared_ptr<clsConstructor> > constructors;
+        std::vector<clsVar> publicVars;
+        std::vector<clsVar> privateVars;
+        std::vector<clsFunction> publicFunctions;
+        std::vector<clsFunction> privateFunctions;
+        std::vector<clsConstructor> constructors;
         std::vector<std::string> dependancies;
     };
 
