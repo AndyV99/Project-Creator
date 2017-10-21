@@ -2,8 +2,8 @@
 #define PARSER_H
 
 #include <fstream>
-#include "../util.h"
 #include "../ConfigLoader/ConfigLoader.h"
+#include "../util.h"
 
 class Parser
 {
@@ -18,6 +18,7 @@ public:
 private:
     std::vector<PCStructs::myCls> classes;
     PCStructs::clsFunction makeFunction(std::string);
+    PCStructs::clsVar makeVariable(std::string);
     ConfigLoader* config;
     std::ofstream* LOG;
     std::ifstream* projectFile;
