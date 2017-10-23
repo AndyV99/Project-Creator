@@ -87,26 +87,25 @@ PCStructs::clsFunction Parser::makeFunction(std::string line)
     returnFunction.returnTypeCode = tmp.typeCode;
     (*LOG) << "\t\t\t\tRETURN TYPE CODE: " << tmp.typeCode << '\n';
 
-    int next = nextOpen;
-    do
-    {
+    int last = nextOpen-1;
+    int next = PCUtil::findNext(last, line, ','); 
+    while(next > 0){
         std::cout << "LINE: " << line << '\n';
-        std::cout << "nextOpen: " << nextOpen << '\n';
+        std::cout << "last: " << last << '\n';
         std::cout << "line.length(): " << line.length() << '\n';
         std::cout << "next: " << next << '\n';
-        std::cout << "newVar string: " << line.substr(1+next, PCUtil::findNext(next+1, line, ',')-next) << '\n';
-        PCStructs::clsVar newVar = makeVariable(line.substr(1+next, PCUtil::findNext(next+1, line, ',')-next));
-        (*LOG) << "\t\t\tIDK WHAT THIS DOES: " << line.substr(1+next, PCUtil::findNext(next+1, line, ',')-next) << '\n';
-        if(next+1 != line.length())
-        {
-            next = PCUtil::findNext(next+1, line, ',');
-        }
-        else
-        {
-            next = 0;
-        }
-        std::cout << "\t\t\tWHAT: " << PCUtil::findNext(next, line, ',')-next << '\n';
-    }while(PCUtil::findNext(next, line, ',') != 0 && next <= line.length());
+        std::cout << "newVar string: " << line.substr(last+2, next-last-2) << '\n';
+        PCStructs::clsVar newVar = makeVariable(line.substr(last+2, next-last-2));
+        (*LOG) << "\t\t\tFUNCTION PARAMETER NAME: " << line.substr(last+2, next-last-2) << '\n';
+       
+	last = next; 
+        next = PCUtil::findNext(next+1, line, ',');
+        if(next == 0 && last != line.length()-1)
+	{
+	    next = line.length()-1;
+	} 
+        
+    }
 
     return returnFunction;
 }
@@ -124,7 +123,7 @@ dependancy = <string>
 */
 PCStructs::clsVar Parser::makeVariable(std::string input)
 {
-    bool printLog = false;;
+    bool printLog = false;
     if(printLog)
     {
         (*LOG) << "\t\t\tMAKE VAR: " << input << '\n';
