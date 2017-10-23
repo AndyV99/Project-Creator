@@ -33,21 +33,148 @@
 [-----BEGIN PARSE-----]
 	PARSER OBJECT CONSTRUCTED
 	LINE: 
+	[--WHITESPACE--]
+	LINE: Class_1
+		CLASS DETECTED
+		NAME: Class_1
+		VARIABLE DETECTED
 		FUNCTION DETECTED
 			MAKE FUNCTION:     +str getPrivateString()
 				FUNCTION NAME:  getPrivateString
+			MAKE VAR: str
+				Comparing input var to : String
+					input[j] = s
+					type[j] = s
+				Comparing input var to : String
+					input[j] = t
+					type[j] = t
+				Comparing input var to : String
+					input[j] = r
+					type[j] = r
+					TYPE FOUND: String
 				RETURN TYPE: str
 				RETURN TYPE CODE: std::string
 		FUNCTION DETECTED
 			MAKE FUNCTION:     +void setPrivateString(str value, int test, int test2)
 				FUNCTION NAME:  setPrivateString
+			MAKE VAR: void
+				Comparing input var to : String
+					input[j] = v
+					type[j] = s
+					TYPE NOT: String
+				Comparing input var to : Vector<T>
+					input[j] = v
+					type[j] = v
+				Comparing input var to : Vector<T>
+					input[j] = o
+					type[j] = e
+					TYPE NOT: Vector<T>
+				Comparing input var to : Integer
+					input[j] = v
+					type[j] = i
+					TYPE NOT: Integer
+				Comparing input var to : Float
+					input[j] = v
+					type[j] = f
+					TYPE NOT: Float
+				Comparing input var to : Double
+					input[j] = v
+					type[j] = d
+					TYPE NOT: Double
+				Comparing input var to : Void 
+					input[j] = v
+					type[j] = v
+				Comparing input var to : Void 
+					input[j] = o
+					type[j] = o
+				Comparing input var to : Void 
+					input[j] = i
+					type[j] = i
+				Comparing input var to : Void 
+					input[j] = d
+					type[j] = d
+					TYPE FOUND: Void 
 				RETURN TYPE: void
 				RETURN TYPE CODE: void
-			FUNCTION PARAMETER NAME: str value
-			FUNCTION PARAMETER NAME: int test
-			FUNCTION PARAMETER NAME: int test2
+			MAKE VAR: str value
+				Comparing input var to : String
+					input[j] = s
+					type[j] = s
+				Comparing input var to : String
+					input[j] = t
+					type[j] = t
+				Comparing input var to : String
+					input[j] = r
+					type[j] = r
+					TYPE FOUND: String
+					NAME: value
+			FUNCTION PARAMETER: str value
+			MAKE VAR: int test
+				Comparing input var to : String
+					input[j] = i
+					type[j] = s
+					TYPE NOT: String
+				Comparing input var to : Vector<T>
+					input[j] = i
+					type[j] = v
+					TYPE NOT: Vector<T>
+				Comparing input var to : Integer
+					input[j] = i
+					type[j] = i
+				Comparing input var to : Integer
+					input[j] = n
+					type[j] = n
+				Comparing input var to : Integer
+					input[j] = t
+					type[j] = t
+					TYPE FOUND: Integer
+					NAME: test
+			FUNCTION PARAMETER: int test
+			MAKE VAR: int test2
+				Comparing input var to : String
+					input[j] = i
+					type[j] = s
+					TYPE NOT: String
+				Comparing input var to : Vector<T>
+					input[j] = i
+					type[j] = v
+					TYPE NOT: Vector<T>
+				Comparing input var to : Integer
+					input[j] = i
+					type[j] = i
+				Comparing input var to : Integer
+					input[j] = n
+					type[j] = n
+				Comparing input var to : Integer
+					input[j] = t
+					type[j] = t
+					TYPE FOUND: Integer
+					NAME: test2
+			FUNCTION PARAMETER: int test2
+		VARIABLE DETECTED
+		VARIABLE DETECTED
 		FUNCTION DETECTED
 			MAKE FUNCTION:     +int getPrivateInt()
 				FUNCTION NAME:  getPrivateInt
+			MAKE VAR: int
+				Comparing input var to : String
+					input[j] = i
+					type[j] = s
+					TYPE NOT: String
+				Comparing input var to : Vector<T>
+					input[j] = i
+					type[j] = v
+					TYPE NOT: Vector<T>
+				Comparing input var to : Integer
+					input[j] = i
+					type[j] = i
+				Comparing input var to : Integer
+					input[j] = n
+					type[j] = n
+				Comparing input var to : Integer
+					input[j] = t
+					type[j] = t
+					TYPE FOUND: Integer
 				RETURN TYPE: int
 				RETURN TYPE CODE: int
+		VARIABLE DETECTED

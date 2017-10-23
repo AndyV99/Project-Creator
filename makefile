@@ -15,6 +15,10 @@ ConfigLoader.o: util.h ConfigLoader/ConfigLoader.h ConfigLoader/ConfigLoader.cpp
 run:
 	./driver.exe
 
+runl:
+	./driver.exe
+	cat log.txt
+
 mem:
 	valgrind --leak-check=full ./driver.exe
 

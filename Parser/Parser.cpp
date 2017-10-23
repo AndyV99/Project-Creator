@@ -19,9 +19,12 @@ void Parser::parseFile()
     while(std::getline((*projectFile), line))
     {
         (*LOG) << "\tLINE: " << line << '\n';
-        if (line[0] != ' ')
+        if (line.length() != 0)
         { //If new class
-            PCStructs::myCls newClass;
+            (*LOG) << "\t\tCLASS DETECTED" << '\n';
+	    PCStructs::myCls newClass;
+	    newClass.name = line;
+	    (*LOG) << "\t\tNAME: " << newClass.name << '\n';
             while(std::getline((*projectFile), line))
             {
                 if(line.substr(line.length()-1, 1) == ")")
@@ -37,34 +40,21 @@ void Parser::parseFile()
                         newClass.privateFunctions.push_back(newFunction);
                     }
                 }
-                else if (true)
-                {
-                    /* code */
-                }
+		else if(line[4] == '=')
+		{
+		    (*LOG) << "\t\tCONSTRUCTOR DETECTED" << '\n';
+		}
+		else
+		{
+		    (*LOG) << "\t\tVARIABLE DETECTED" << '\n';
+		}
+
             }
 
-            /*
-            //if 6 to current config var length is equal to the config type
-            for (int i = 0; i < config->getConfigSettings(); i++)
-            { //for each config setting
-                bool stillSame == true;
-                for (int j = 0; j < config->getConfigSettings()[i].type && stillSame; j++)
-                { //for each character in configsetting.type
-                    if(line[5+j] != config->getConfigSettings()[i].type[j])
-                    { //if any 2 characters aren't the same
-                        stillSame = false;
-                    }
-                }
-                if(stillSame)
-                { //if all of the caracters are the same
-
-                }
-            }
-            */
         }
         else
         { //whitespace
-
+	    (*LOG) << "\t[--WHITESPACE--]" << '\n';
         }
     }
 
@@ -90,20 +80,17 @@ PCStructs::clsFunction Parser::makeFunction(std::string line)
     int last = nextOpen-1;
     int next = PCUtil::findNext(last, line, ','); 
     while(next > 0){
-        std::cout << "LINE: " << line << '\n';
-        std::cout << "last: " << last << '\n';
-        std::cout << "line.length(): " << line.length() << '\n';
-        std::cout << "next: " << next << '\n';
-        std::cout << "newVar string: " << line.substr(last+2, next-last-2) << '\n';
         PCStructs::clsVar newVar = makeVariable(line.substr(last+2, next-last-2));
-        (*LOG) << "\t\t\tFUNCTION PARAMETER NAME: " << line.substr(last+2, next-last-2) << '\n';
+        (*LOG) << "\t\t\tFUNCTION PARAMETER: " << line.substr(last+2, next-last-2) << '\n';
        
 	last = next; 
         next = PCUtil::findNext(next+1, line, ',');
         if(next == 0 && last != line.length()-1)
 	{
 	    next = line.length()-1;
-	} 
+	}
+
+	returnFunction.functionVars.push_back(newVar); 
         
     }
 
@@ -123,7 +110,7 @@ dependancy = <string>
 */
 PCStructs::clsVar Parser::makeVariable(std::string input)
 {
-    bool printLog = false;
+    bool printLog = true;
     if(printLog)
     {
         (*LOG) << "\t\t\tMAKE VAR: " << input << '\n';
@@ -171,6 +158,11 @@ PCStructs::clsVar Parser::makeVariable(std::string input)
         {
             (*LOG) << "\t\t\t\tINVALID TYPE" << '\n';
         }
+    }
+    if(input.length() != returnVar.type.length())
+    {
+	returnVar.name = input.substr(returnVar.type.length()+1);
+	(*LOG) << "\t\t\t\t\tNAME: " << returnVar.name << '\n';
     }
     return returnVar;
 }
