@@ -29,46 +29,53 @@ void Parser::parseFile()
 	    (*LOG) << "\t\tNAME: " << newClass.name << '\n';
 		std::cout << "\t\tNAME: " << newClass.name << '\n';
             while(std::getline((*projectFile), line) && line.length() != 0)
-            {
+            { // for each line under the class
 				if(line[4] == '=')
-				{
+				{ // if line starts with '=', it's a constructor
 					(*LOG) << "\t\tCONSTRUCTOR DETECTED" << '\n';
 					std::cout << "\t\tCONSTRUCTOR DETECTED" << '\n';
 					PCStructs::clsConstructor newConstructor = makeConstructor(line);
 				}
 				else if(line[4] == '~')
-				{
-					
+				{ // if line starts with '~', it's a destructor
 					(*LOG) << "\t\tDESTRUCTOR DETECTED" << '\n';
 					std::cout << "\t\tDESTRUCTOR DETECTED" << '\n';
 				}
-				else if(line.substr(line.length()-1, 1) == ")" && line[4] != '=')
-                { // if it's a function
+				else if(line.substr(line.length()-1, 1) == ")")
+                { // if line ends in ')', it's a function 
                     (*LOG) << "\t\tFUNCTION DETECTED" << '\n';
 					std::cout << "\t\tFUNCTION DETECTED" << '\n';
                     PCStructs::clsFunction newFunction = makeFunction(line);
                     if(line[4] == '+')
-                    {
+                    { // if line starts with '+', function is public
                         newClass.publicFunctions.push_back(newFunction);
                     }
                     else if(line[4] == '-')
-                    {
+                    { // if line starts with '-', function is private
                         newClass.privateFunctions.push_back(newFunction);
                     }
                 }
 				else
-				{
+				{ // if it isn't a constructor, destructor, or function, it's a variable
 					(*LOG) << "\t\tVARIABLE DETECTED" << '\n';
 					std::cout << "\t\tVARIABLE DETECTED" << '\n';
+					PCStructs::clsVar newVar = makeVariable(line);
+					if(line[4] == '+')
+					{ // if line starts with '+', variable is public
+						newClass.publicVars.push_back(newVar);
+					}
+					else if(line[4] == '-')
+					{ // if line starts with '-', variable is private
+						newClass.privateVars.push_back(newVar);
+					}
 				}
             }
         }
         else
         { //whitespace
-	    (*LOG) << "\t[--WHITESPACE--]" << '\n';
+			(*LOG) << "\t[--WHITESPACE--]" << '\n';
         }
     }
-
 }
 
 PCStructs::clsFunction Parser::makeFunction(std::string input)
@@ -91,23 +98,12 @@ PCStructs::clsFunction Parser::makeFunction(std::string input)
     (*LOG) << "\t\t\t\tRETURN TYPE CODE: " << tmp.typeCode << '\n';
 
 	if(open != close-1)
-	{
+	{ // if there's stuff between the parenthesis
 		returnFunction.functionVars = makeFunctionVars(input.substr(open, close-open));
 	}
     return returnFunction;
 }
 
-/*
-input example: "str myString"
-output example
-clsVar
-{
-name = myString
-type = str
-typeCode = std::string
-dependancy = <string>
-}
-*/
 PCStructs::clsVar Parser::makeVariable(std::string input)
 {
     bool printLog = true;
@@ -160,9 +156,12 @@ PCStructs::clsVar Parser::makeVariable(std::string input)
         }
     }
     if(input.length() != returnVar.type.length())
-    {
-	returnVar.name = input.substr(returnVar.type.length()+1);
-	(*LOG) << "\t\t\t\t\tNAME: " << returnVar.name << '\n';
+	{
+		returnVar.name = input.substr(returnVar.type.length()+1);
+		if(printLog)
+		{
+			(*LOG) << "\t\t\t\t\tNAME: " << returnVar.name << '\n';
+		}
     }
     return returnVar;
 }
@@ -188,7 +187,7 @@ PCStructs::clsConstructor Parser::makeConstructor(std::string input)
 		}
 	}
 	else
-	{
+	{ // If the parenthesis are empty
 		(*LOG) << "\t\t\t\tNO CONSTRUCTOR VARS" << '\n';
 	}
 	return returnConstructor;
@@ -201,10 +200,11 @@ std::vector<PCStructs::clsVar> Parser::makeFunctionVars(std::string input)
 	int last = 0;
 	int next = PCUtil::findNext(last, input, ',');
 	if(next == 0)
-	{
+	{ // if there's only 1 parameter
 		next = input.length();
 	}
-	while(!done){
+	while(!done)
+	{
 		PCStructs::clsVar newVar = makeVariable(input.substr(last+1, next-last-1));
 		(*LOG) << "\t\t\t\tFUNCTION PARAMETER: " << input.substr(last+1, next-last-1) << '\n';
 		std::cout << "\t\t\t\tFUNCTION PARAMETER: " << input.substr(last+1, next-last-1) << '\n';
