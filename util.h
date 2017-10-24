@@ -1,6 +1,7 @@
 #ifndef PCSTRUCTS_H
 #define PCSTRUCTS_H
 
+#include "ConfigLoader/ConfigLoader.h"
 #include <boost/shared_ptr.hpp>
 #include <vector>
 #include <string>
@@ -19,13 +20,14 @@ namespace PCStructs {
         std::string name;
         std::string returnType;
         std::string returnTypeCode;
-        std::vector<boost::shared_ptr<clsVar> > functionVars;
+        std::vector<clsVar> functionVars;
     };
 
     struct clsConstructor
     {
         bool inherited;
-        std::vector<boost::shared_ptr<clsVar> > constructorVars;
+        std::vector<clsVar> constructorVars;
+		std::vector<clsVar> parentVars;
     };
 
     struct myCls
@@ -64,6 +66,7 @@ namespace PCUtil {
         }
         return 0;
     }
+
 } /* PCUtil */
 
 #endif /* end of include guard: PCUTIL_H */

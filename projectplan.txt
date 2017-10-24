@@ -1,10 +1,22 @@
 Title
 
 Class_1
+    =Class_1(int startValue)
+    ~Class_1()
     -str privateString
     +str getPrivateString()
     +void setPrivateString(str value)
+    +void testFunction(int test1, int test2)
     +str publicString
     -int privateInt
     +int getPrivateInt()
     +vec<int> publicIntVector
+
+Class_2 : Class_1
+    =Class_2(str startString)
+    =Class_2(str startString, int startValue):(startValue)
+    ~Class_2()
+    -str privateString
+    +str getPrivateString()
+    +void setPrivateString(str value, int test, int test2)
+    
