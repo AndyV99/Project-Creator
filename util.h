@@ -27,6 +27,7 @@ namespace PCStructs {
     {
         bool inherited;
         std::vector<clsVar> constructorVars;
+		std::vector<clsVar> parentVars;
     };
 
     struct myCls
@@ -66,10 +67,6 @@ namespace PCUtil {
         return 0;
     }
 
-    inline std::vector<std::string> generateVariable(std::string input)
-    {
-        
-    }
 } /* PCUtil */
 
 #endif /* end of include guard: PCUTIL_H */
