@@ -24,12 +24,13 @@ void Parser::parseFile()
         { //If new class
             (*LOG) << "\t\tCLASS DETECTED" << '\n';
 			std::cout << "\t\tCLASS DETECTED" << '\n';
-	    PCStructs::myCls newClass;
-	    newClass.name = line;
-	    (*LOG) << "\t\tNAME: " << newClass.name << '\n';
-		std::cout << "\t\tNAME: " << newClass.name << '\n';
+			PCStructs::myCls newClass;
+			newClass.name = line;
+			(*LOG) << "\t\tNAME: " << newClass.name << '\n';
+			std::cout << "\t\tNAME: " << newClass.name << '\n';
             while(std::getline((*projectFile), line) && line.length() != 0)
             { // for each line under the class
+				std::cout << "\tLINE: " << line << '\n';
 				if(line[4] == '=')
 				{ // if line starts with '=', it's a constructor
 					(*LOG) << "\t\tCONSTRUCTOR DETECTED" << '\n';
@@ -59,7 +60,7 @@ void Parser::parseFile()
 				{ // if it isn't a constructor, destructor, or function, it's a variable
 					(*LOG) << "\t\tVARIABLE DETECTED" << '\n';
 					std::cout << "\t\tVARIABLE DETECTED" << '\n';
-					PCStructs::clsVar newVar = makeVariable(line);
+					PCStructs::clsVar newVar = makeVariable(line.substr(5));
 					if(line[4] == '+')
 					{ // if line starts with '+', variable is public
 						newClass.publicVars.push_back(newVar);
@@ -70,6 +71,7 @@ void Parser::parseFile()
 					}
 				}
             }
+			classes.push_back(newClass);
         }
         else
         { //whitespace

@@ -49,6 +49,12 @@ namespace PCStructs {
         std::string typeCode; //what it will look like in code
         std::string dependancy; //what to include
     };
+
+	struct project
+	{
+		std::string name;
+		std::vector<myCls> classes;
+	};
 } /* PCStructs */
 #endif /* end of include guard: PCSTRUCTS_H */
 
