@@ -12,7 +12,7 @@ public:
     Parser(std::ofstream*, std::ifstream*, ConfigLoader*);
     ~Parser();
 
-    void parseFile();
+	void parseFile();
     std::vector<PCStructs::myCls> getClasses();
 
 private:

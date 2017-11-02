@@ -1,15 +1,19 @@
 #include <fstream>
 #include "Parser/Parser.h"
 #include "ConfigLoader/ConfigLoader.h"
+#include "util.h"
 
-int main(int argc, char const *argv[]) {
+int main(int argc, char const *argv[])
+{
     std::ofstream* LOG = new std::ofstream("log.txt");
-    std::ifstream* projectPlanFile = new std::ifstream("projectplan.txt");
     std::ifstream* configFile = new std::ifstream("config.txt");
+    std::ifstream* projectPlanFile = new std::ifstream("projectplan.txt");
 
-    std::string projectName;
-    std::getline((*projectPlanFile), projectName);
+	PCStructs::project* project = new PCStructs::project();
+	std::getline((*projectPlanFile), project->name);
 
+    // std::string projectName;
+    // std::getline((*projectPlanFile), projectName);
 
     /*
         1. Load Config
