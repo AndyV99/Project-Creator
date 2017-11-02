@@ -41,13 +41,9 @@ void Parser::parseFile()
 				std::cout << "\t\tPARENT NAME: " << newClass.parent << '\n';
 			}
 
-			(*LOG) << "\t\tNAME: " << newClass.name << '\n';
-			newClass.name = line;
-			(*LOG) << "\t\tNAME: " << newClass.name << '\n';
-			std::cout << "\t\tNAME: " << newClass.name << '\n';
             while(std::getline((*projectFile), line) && line.length() != 0)
             { // for each line under the class
-				std::cout << "\tLINE: " << line << '\n';
+				// std::cout << "\tLINE: " << line << '\n';
 				if(line[4] == '=')
 				{ // if line starts with '=', it's a constructor
 					(*LOG) << "\t\tCONSTRUCTOR DETECTED" << '\n';
