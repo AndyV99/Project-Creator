@@ -2,7 +2,6 @@
 #define PCSTRUCTS_H
 
 #include "ConfigLoader/ConfigLoader.h"
-#include <boost/shared_ptr.hpp>
 #include <vector>
 #include <string>
 
@@ -33,7 +32,7 @@ namespace PCStructs {
     struct myCls
     {
         std::string name;
-        myCls* parent;
+		std::string parent;
         std::vector<clsVar> publicVars;
         std::vector<clsVar> privateVars;
         std::vector<clsFunction> publicFunctions;

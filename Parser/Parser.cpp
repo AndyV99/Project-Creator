@@ -24,10 +24,24 @@ void Parser::parseFile()
         { //If new class
             (*LOG) << "\t\tCLASS DETECTED" << '\n';
 			std::cout << "\t\tCLASS DETECTED" << '\n';
-	    PCStructs::myCls newClass;
-	    newClass.name = line;
-	    (*LOG) << "\t\tNAME: " << newClass.name << '\n';
-		std::cout << "\t\tNAME: " << newClass.name << '\n';
+			PCStructs::myCls newClass;
+			int colon = PCUtil::findNext(0, line, ':');
+			if(colon == 0)
+			{
+				std::cout << "\t\tBASE CLASS" << '\n';
+				newClass.name = line;
+				std::cout << "\t\tNAME: " << newClass.name << '\n';
+			}
+			else
+			{
+				std::cout << "\t\tINHERITED CLASS" << '\n';
+				newClass.name = line.substr(0, colon-1);
+				newClass.parent = line.substr(colon+2);
+				std::cout << "\t\tNAME: " << newClass.name << '\n';
+				std::cout << "\t\tPARENT NAME: " << newClass.parent << '\n';
+			}
+
+			(*LOG) << "\t\tNAME: " << newClass.name << '\n';
             while(std::getline((*projectFile), line) && line.length() != 0)
             { // for each line under the class
 				if(line[4] == '=')
