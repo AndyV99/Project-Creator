@@ -49,7 +49,7 @@ void Parser::parseFile()
 					(*LOG) << "\t\tCONSTRUCTOR DETECTED" << '\n';
 					std::cout << "\t\tCONSTRUCTOR DETECTED" << '\n';
 					PCStructs::clsConstructor newConstructor = makeConstructor(line);
-				}
+			}
 				else if(line[4] == '~')
 				{ // if line starts with '~', it's a destructor
 					(*LOG) << "\t\tDESTRUCTOR DETECTED" << '\n';
@@ -134,25 +134,31 @@ PCStructs::clsVar Parser::makeVariable(std::string input)
         bool stillSame = true;
         for (j = 0; j < config->getConfigSettings()[i].type.length() && stillSame; j++)
         { //for each character in configsetting.type
+
             if(printLog)
             {
                 (*LOG) << "\t\t\t\tComparing input var to : " << config->getConfigSettings()[i].name << '\n';
                 (*LOG) << "\t\t\t\t\tinput[j] = " << input[j] << '\n';
                 (*LOG) << "\t\t\t\t\ttype[j] = " << config->getConfigSettings()[i].type[j] << '\n';
             }
+
             if(input[j] != config->getConfigSettings()[i].type[j])
             { //if any 2 characters aren't the same
                 stillSame = false;
             }
         }
+
         if(stillSame)
         { //if all of the caracters are the same
+			
             if(printLog)
             {
                 (*LOG) << "\t\t\t\t\tTYPE FOUND: " << config->getConfigSettings()[i].name << '\n';
             }
+
             returnVar.type = config->getConfigSettings()[i].type;
             returnVar.typeCode = config->getConfigSettings()[i].typeCode;
+			returnVar.dependancy = config->getConfigSettings()[i].dependancy;
             foundType = true;
         }
         else

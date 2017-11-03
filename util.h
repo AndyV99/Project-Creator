@@ -38,7 +38,37 @@ namespace PCStructs {
         std::vector<clsFunction> privateFunctions;
         std::vector<clsConstructor> constructors;
         std::vector<std::string> dependancies;
-    };
+		void buildDependancies()
+		{
+			std::vector<std::string> allDependancies;
+
+			for(int i = 0; i < publicVars.size(); i++)
+			{
+				dependancies.push_back(publicVars[i].dependancy);
+			}
+
+			for(int i = 0; i < privateVars.size(); i++)
+			{
+				dependancies.push_back(privateVars[i].dependancy);
+			}
+			
+			for(int i = 0; i < publicFunctions.size(); i++)
+			{
+				for(int j = 0; j < publicFunctions[i].functionVars.size(); j++)
+				{
+					dependancies.push_back(publicFunctions[i].functionVars[j].dependancy);
+				}
+			}
+
+			for(int i = 0; i < privateFunctions.size(); i++)
+			{
+				for(int j = 0; j < privateFunctions[i].functionVars.size(); j++)
+				{
+					dependancies.push_back(privateFunctions[i].functionVars[j].dependancy);
+				}
+			}
+		}
+	};
 
     struct configSetting
     {
