@@ -36,6 +36,17 @@ void Builder::buildFileStructure(PCStructs::project* project)
 	for(int i = 0; i < project->classes.size(); i++)
 	{
 		std::string name = project->classes[i].name;
+		mkdir(name.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		std::string classPath = project->name + "/" + name;
+		std::ofstream header((classPath + ".h").c_str());
+		std::ofstream cpp((classPath + ".cpp").c_str());
+
+		for(int j = 0; j < project->classes[i].dependancies.size(); j++)
+		{
+			header << "#include " << project->classes[i].dependancies[j] << '\n';
+
+		}
+		cpp << "#include \"" << name << ".h" << '\n';
 		driver << "#include \"" << name << "/" << name << ".h\"" << '\n'; 
 	}
 
@@ -45,7 +56,9 @@ void Builder::buildFileStructure(PCStructs::project* project)
 std::string Builder::buildClass(PCStructs::myCls myClass)
 {
 
-	/* Class Name With Inheritance
+	/* Include Dependancies
+	 * Include Header in cpp
+	 * Class Name With Inheritance
 	 * Public
 	 * 	Constructors
 	 * 	Deconstructor
