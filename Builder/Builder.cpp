@@ -51,18 +51,17 @@ void Builder::buildFileStructure(PCStructs::project* project)
 			header << "#include " << project->classes[i]->dependancies[j] << '\n';
 
 		}
-		cpp << "#include \"" << project->classes[i]->name << ".h" << '\n';
-		driver << "#include \"" << name << "/" << name << ".h\"" << '\n'; 
+		cpp << "#include \"" << project->classes[i]->name << ".h\"" << '\n';
+		driver << "#include \"" << name << "/" << project->classes[i]->name << ".h\"" << '\n'; 
 	}
-
 }
-
 
 std::string Builder::buildClass(PCStructs::myCls myClass)
 {
 	std::string returnString;
-	/* Include Dependancies
-	 * Include Header in cpp
+
+	/* 
+	 * 
 	 * Class Name With Inheritance
 	 * Public
 	 * 	Constructors
