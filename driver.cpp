@@ -1,6 +1,8 @@
 #include <fstream>
+#include <iostream>
 #include "Parser/Parser.h"
 #include "ConfigLoader/ConfigLoader.h"
+#include "Builder/Builder.h"
 #include "util.h"
 
 int main(int argc, char const *argv[])
@@ -30,6 +32,10 @@ int main(int argc, char const *argv[])
     Parser* parser = new Parser(LOG, projectPlanFile, configLoader);
     parser->parseFile();
 
+	project->classes = parser->getClasses();
+	
+	std::cout << "GOT CLASSES" << '\n';
+	Builder* builder = new Builder(LOG, project);
 
     LOG->close();
     projectPlanFile->close();

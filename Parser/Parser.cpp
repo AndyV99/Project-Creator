@@ -84,7 +84,9 @@ void Parser::parseFile()
 					}
 				}
             }
-			classes.push_back(newClass);
+			newClass.buildDependancies();
+			PCStructs::myCls* cls = new PCStructs::myCls(&newClass);
+			classes.push_back(cls);
         }
         else
         { //whitespace
@@ -255,7 +257,7 @@ std::vector<PCStructs::clsVar> Parser::makeFunctionVars(std::string input)
 	return returnVector;
 }
 
-std::vector<PCStructs::myCls> Parser::getClasses()
+std::vector<PCStructs::myCls*> Parser::getClasses()
 {
     return this->classes;
 }

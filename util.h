@@ -38,25 +38,36 @@ namespace PCStructs {
         std::vector<clsFunction> privateFunctions;
         std::vector<clsConstructor> constructors;
         std::vector<std::string> dependancies;
+		myCls(){}
+		myCls(myCls* c)
+		{
+			this->name = c->name;
+			this->parent = c->parent;
+			this->publicVars = c->publicVars;
+			this->privateVars = c->privateVars;
+			this->publicFunctions = c->publicFunctions;
+			this->privateFunctions = c->privateFunctions;
+			this->constructors = c->constructors;
+			this->dependancies = c->dependancies;
+		}
 		void buildDependancies()
 		{
 			std::vector<std::string> allDependancies;
-
 			for(int i = 0; i < publicVars.size(); i++)
 			{
-				dependancies.push_back(publicVars[i].dependancy);
+				allDependancies.push_back(publicVars[i].dependancy);
 			}
 
 			for(int i = 0; i < privateVars.size(); i++)
 			{
-				dependancies.push_back(privateVars[i].dependancy);
+				allDependancies.push_back(privateVars[i].dependancy);
 			}
 			
 			for(int i = 0; i < publicFunctions.size(); i++)
 			{
 				for(int j = 0; j < publicFunctions[i].functionVars.size(); j++)
 				{
-					dependancies.push_back(publicFunctions[i].functionVars[j].dependancy);
+					allDependancies.push_back(publicFunctions[i].functionVars[j].dependancy);
 				}
 			}
 
@@ -64,7 +75,22 @@ namespace PCStructs {
 			{
 				for(int j = 0; j < privateFunctions[i].functionVars.size(); j++)
 				{
-					dependancies.push_back(privateFunctions[i].functionVars[j].dependancy);
+					allDependancies.push_back(privateFunctions[i].functionVars[j].dependancy);
+				}
+			}
+			for(int i = 0; i < allDependancies.size(); i++)
+			{ // For all dependancies in the class
+				bool alreadyExists = false;
+				for(int j = 0; j < this->dependancies.size(); j++)
+				{ // For all dependancies we've already added
+					if(allDependancies[i] == this->dependancies[j] || allDependancies[i] == "")
+					{ // If the dependancy has already been added
+						alreadyExists = true;	
+					}
+				}
+				if(!alreadyExists)
+				{ // If the dependancy hasn't already been added
+					this->dependancies.push_back(allDependancies[i]);
 				}
 			}
 		}
@@ -81,7 +107,7 @@ namespace PCStructs {
 	struct project
 	{
 		std::string name;
-		std::vector<myCls> classes;
+		std::vector<myCls*> classes;
 	};
 } /* PCStructs */
 #endif /* end of include guard: PCSTRUCTS_H */

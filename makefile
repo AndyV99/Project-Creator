@@ -25,3 +25,7 @@ mem:
 clean:
 	rm *.o
 	rm driver.exe
+
+del:
+	rm -r Title/*
+	rmdir Title/
