@@ -34,7 +34,6 @@ int main(int argc, char const *argv[])
 
 	project->classes = parser->getClasses();
 	
-	std::cout << "GOT CLASSES" << '\n';
 	Builder* builder = new Builder(LOG, project);
 
     LOG->close();

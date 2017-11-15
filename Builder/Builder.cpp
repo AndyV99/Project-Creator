@@ -21,47 +21,56 @@ Builder::~Builder(){}
 void Builder::buildProject(PCStructs::project* project)
 {
 	this->buildFileStructure(project);
-	std::cout << "File Structure Built" << '\n';
 	for(int i = 0; i < project->classes.size(); i++)
 	{
-		std::cout << "BUILDING CLASS: " << project->classes[i]->name << '\n';
-		this->buildClass(project->classes[i]);
+		this->buildClass(project->classes[i], project->name);
 	}
 }
 
 void Builder::buildFileStructure(PCStructs::project* project)
 {
     mkdir(project->name.c_str(),  S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-	std::cout << "DRIVER FILE MADE" << '\n';
-	std::string driverPath = project->name +  "/driver.cpp";
-	std::ofstream driver(driverPath.c_str());
 	for(int i = 0; i < project->classes.size(); i++)
 	{
-		std::cout << "MAKING CLASS STUFF: " << project->classes[i]->name << '\n';
+		std::cout << "FILE STRUCTURE" << '\n';
 		std::string name = project->name + "/" +  project->classes[i]->name;
-		std::cout << "NAME: " << name << '\n';
 		mkdir(name.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-		std::string classPath = name + "/" + project->classes[i]->name;
-		std::cout << "CLASS PATH: " << classPath << '\n';
-		std::ofstream header((classPath + ".h").c_str());
-		std::ofstream cpp((classPath + ".cpp").c_str());
-
-		for(int j = 0; j < project->classes[i]->dependancies.size(); j++)
-		{
-			header << "#include " << project->classes[i]->dependancies[j] << '\n';
-
-		}
-		cpp << "#include \"" << project->classes[i]->name << ".h\"" << '\n';
-		driver << "#include \"" << name << "/" << project->classes[i]->name << ".h\"" << '\n'; 
 	}
 }
 
-std::string Builder::buildClass(PCStructs::myCls myClass)
+std::string Builder::buildClass(PCStructs::myCls myClass, std::string projectName)
 {
+	std::cout << "BUILD CLASS" << '\n';
 	std::string returnString;
+	std::string header = projectName + "/" + myClass.name + "/" + myClass.name + ".h";
+	std::string cpp = projectName + "/" + myClass.name + "/" + myClass.name + ".cpp";
 
-	/* 
-	 * 
+	std::ofstream headerFile(header);
+	std::ofstream cppFile(cpp);
+
+	for(int i = 0; i < myClass.dependancies.size(); i++)
+	{
+		headerFile << "#include " << myClass.dependancies[i] << '\n';
+	}
+
+	headerFile << myClass.name;
+	if(myClass.parent != "")
+	{
+		headerFile << " : " << myClass.parent << '\n';
+	}
+	else
+	{
+		headerFile << '\n';
+	}
+	headerFile << '{' << '\n';
+	headerFile << "public:" << '\n';
+	for(int i = 0; i < myClass.constructors.size(); i++)
+	{
+		std::cout << "CONSTRUCTOR" << '\n';
+		headerFile << '\t' << myClass.name <<  buildConstructor(myClass.constructors[i]) << '\n';
+	}
+	/*  
+	 * Include Header/Dependancies
 	 * Class Name With Inheritance
 	 * Public
 	 * 	Constructors
@@ -73,6 +82,8 @@ std::string Builder::buildClass(PCStructs::myCls myClass)
 	 *  Private Variables
 	 *  Private Functions
 	 */
+	headerFile.close();
+	cppFile.close();
 	return returnString;
 }
 
@@ -84,4 +95,42 @@ std::string Builder::buildVariable(PCStructs::clsVar variable)
 
 std::string Builder::buildFunction(PCStructs::clsFunction function) {}
 
-std::string Builder::buildConstructor(PCStructs::clsConstructor constructor) {}
+std::string Builder::buildConstructor(PCStructs::clsConstructor constructor)
+{
+	std::stringstream outStream;
+	outStream << buildFunctionVars(constructor.constructorVars);
+	if(constructor.inherited)
+	{
+		outStream << ":" << buildFunctionVars(constructor.parentVars) << '\n';
+	}
+	else
+	{
+		outStream << '\n';
+	}
+	return outStream.str();
+}
+
+std::string Builder::buildFunctionVars(std::vector<PCStructs::clsVar> vars)
+{
+	std::cout << "buildFunctionVars: " << '\n';
+	std::stringstream outStream;
+	
+	std::cout << "(";
+	outStream << "(";	
+	for(int i = 0; i < vars.size(); i++)
+	{
+		if(i == vars.size()-1)
+		{
+			std::cout << vars[i].typeCode;
+			outStream << vars[i].typeCode;
+		}
+		else
+		{
+			std::cout << vars[i].typeCode << ",";
+			outStream << vars[i].typeCode << ",";
+		}
+	}
+	std::cout << ")";
+	outStream << ")";
+	return outStream.str();
+}

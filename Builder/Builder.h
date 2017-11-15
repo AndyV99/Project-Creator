@@ -13,10 +13,11 @@ public:
 private:
 	void buildProject(PCStructs::project*);
 	void buildFileStructure(PCStructs::project*);
-	std::string buildClass(PCStructs::myCls);
+	std::string buildClass(PCStructs::myCls, std::string projectName);
 	std::string buildVariable(PCStructs::clsVar);
 	std::string buildFunction(PCStructs::clsFunction);
 	std::string buildConstructor(PCStructs::clsConstructor);
+	std::string buildFunctionVars(std::vector<PCStructs::clsVar>);
 
 	std::ofstream* LOG;
 

@@ -11,6 +11,7 @@ namespace PCStructs {
         std::string type;
         std::string typeCode;
         std::string dependancy;
+		bool isPointer;
     };
 
     struct clsFunction
@@ -127,6 +128,16 @@ namespace PCUtil {
         return 0;
     }
 
+    inline int findPrev(int start, std::string line, char c)
+    {
+        for (int i = start; i > 0; i--) {
+            if(line[i] == c)
+            {
+                return i;
+            }
+        }
+        return 0;
+    }
 } /* PCUtil */
 
 #endif /* end of include guard: PCUTIL_H */
