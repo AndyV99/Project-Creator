@@ -90,7 +90,7 @@ PCStructs::clsFunction Parser::makeFunction(std::string input)
     int open = PCUtil::findNext(nextSpace, input, '(');
 	int close = PCUtil::findNext(nextSpace, input, ')');
 
-    returnFunction.name = input.substr(nextSpace, open-nextSpace);
+    returnFunction.name = input.substr(nextSpace+1, open-nextSpace-1);
 
     PCStructs::clsVar tmp = makeVariable(input.substr(5, PCUtil::findNext(5, input, ' ')-5));
     returnFunction.returnType = tmp.type;
@@ -128,7 +128,7 @@ PCStructs::clsVar Parser::makeVariable(std::string input)
 
 				returnVar.type = returnVar.type + "<" + newVar.type + ">";
 
-				returnVar.typeCode = returnVar.typeCode + "<" + newVar.typeCode + " >";
+				returnVar.typeCode = returnVar.typeCode + "<" + newVar.typeCode + "> ";
 
 				stillSame = false;
 				foundType = true;
@@ -156,6 +156,7 @@ PCStructs::clsVar Parser::makeVariable(std::string input)
     if(!foundType)
     {
 		(*LOG) << "\t\t\t\tINVALID TYPE" << '\n';
+		returnVar.name = input;
     }
     if(PCUtil::findNext(0, input, ' ') != 0)
 	{
@@ -178,6 +179,7 @@ PCStructs::clsConstructor Parser::makeConstructor(std::string input)
 		{ // If there is a colon indicated inheritance
 			open = PCUtil::findNext(close+1, input, '(');
 			close = PCUtil::findNext(close+1, input, ')');
+			std::cout << "makeConstructor parent vars: " << input.substr(open+1, close-open-1) << '\n';
 			returnConstructor.parentVars = makeFunctionVars(input.substr(open, close-open));
 			returnConstructor.inherited = true;
 		}

@@ -23,7 +23,17 @@ void Builder::buildProject(PCStructs::project* project)
 	this->buildFileStructure(project);
 	for(int i = 0; i < project->classes.size(); i++)
 	{
-		this->buildClass(project->classes[i], project->name);
+		std::string header = project->name + '/' + project->classes[i]->name + '/' + project->classes[i]->name + ".h";
+		std::string cpp = project->name + '/' + project->classes[i]->name + '/' + project->classes[i]->name + ".cpp";
+		std::ofstream headerFile(header);
+		std::ofstream cppFile(cpp);
+
+		std::vector<std::string> strings = buildClass(project->classes[i]);
+		headerFile << strings[0];
+		cppFile << strings[1];
+
+		headerFile.close();
+		cppFile.close();
 	}
 }
 
@@ -38,99 +48,129 @@ void Builder::buildFileStructure(PCStructs::project* project)
 	}
 }
 
-std::string Builder::buildClass(PCStructs::myCls myClass, std::string projectName)
+std::vector<std::string> Builder::buildClass(PCStructs::myCls myClass)
 {
 	std::cout << "BUILD CLASS" << '\n';
-	std::string returnString;
-	std::string header = projectName + "/" + myClass.name + "/" + myClass.name + ".h";
-	std::string cpp = projectName + "/" + myClass.name + "/" + myClass.name + ".cpp";
-
-	std::ofstream headerFile(header);
-	std::ofstream cppFile(cpp);
+	std::stringstream headerStream;
+	std::stringstream cppStream;
+	std::vector<std::string> returnStrings;
 
 	for(int i = 0; i < myClass.dependancies.size(); i++)
 	{
-		headerFile << "#include " << myClass.dependancies[i] << '\n';
+		headerStream << "#include " << myClass.dependancies[i] << '\n';
 	}
 
-	headerFile << myClass.name;
+	headerStream << "class " <<  myClass.name;
 	if(myClass.parent != "")
 	{
-		headerFile << " : " << myClass.parent << '\n';
+		headerStream << " : public " << myClass.parent << '\n';
+		cppStream << "#include \"../" << myClass.parent << "/" << myClass.parent << '\n' << '\n';
 	}
 	else
 	{
-		headerFile << '\n';
+		headerStream << '\n';
 	}
-	headerFile << '{' << '\n';
-	headerFile << "public:" << '\n';
+	headerStream << '{' << '\n';
+
+	// PUBLIC
+	headerStream << "public:" << '\n';
+
+	// CONSTRUCTORS
 	for(int i = 0; i < myClass.constructors.size(); i++)
 	{
-		std::cout << "CONSTRUCTOR" << '\n';
-		headerFile << '\t' << myClass.name <<  buildConstructor(myClass.constructors[i]) << '\n';
+		headerStream << '\t' << myClass.name <<  buildFunctionVars(myClass.constructors[i].constructorVars, false) << ';' << '\n';
+		cppStream << myClass.name << "::" << myClass.name << buildFunctionVars(myClass.constructors[i].constructorVars, true);
+		if(myClass.constructors[i].inherited)
+		{
+			std::cout << myClass.constructors[i].parentVars[0].name << '\n';
+			cppStream << " : " << myClass.parent << buildFunctionVars(myClass.constructors[i].parentVars, true);
+		}
+		cppStream << " {}" << '\n' << '\n';
 	}
-	/*  
-	 * Include Header/Dependancies
-	 * Class Name With Inheritance
-	 * Public
-	 * 	Constructors
-	 * 	Deconstructor
-	 * 	Public Variables
-	 * 	public functions
-	 *  
-	 * Private
-	 *  Private Variables
-	 *  Private Functions
-	 */
-	headerFile.close();
-	cppFile.close();
-	return returnString;
+
+	// DESTRUCTOR
+	headerStream << '\t' << "~" << myClass.name << "();" << '\n';
+	cppStream << myClass.name << "::~"  << myClass.name << "() {}" << '\n';
+
+	// VARIABLES
+	std::cout << "myClass.publicVars.size(): " << myClass.publicVars.size() << '\n';
+	for(int i = 0; i < myClass.publicVars.size(); i++)
+	{
+		headerStream << '\t' << buildVariable(myClass.publicVars[i]) << ';' << '\n';
+	}
+
+	// FUNCTIONS
+	for(int i = 0; i < myClass.publicFunctions.size(); i++)
+	{
+		headerStream << '\t' << myClass.publicFunctions[i].returnTypeCode << buildFunction(myClass.publicFunctions[i], false) << ';' << '\n';
+		cppStream << myClass.publicFunctions[i].returnTypeCode << " " <<  myClass.name << "::" << buildFunction(myClass.publicFunctions[i], true) << "{}" << '\n';  
+	}
+
+	// PRIVATE
+	headerStream << "private:" << '\n';		
+	
+	// VARIABLES
+	for(int i = 0; i < myClass.privateVars.size(); i++)
+	{
+		headerStream << '\t' << buildVariable(myClass.privateVars[i]) << ';' << '\n';
+	}
+
+	// FUNCTIONS
+	for(int i = 0; i < myClass.privateFunctions.size(); i++)
+	{
+		headerStream << '\t' << myClass.privateFunctions[i].returnTypeCode << buildFunction(myClass.privateFunctions[i], false) << ';' << '\n';
+		cppStream << myClass.privateFunctions[i].returnTypeCode << " " << myClass.name << "::" << buildFunction(myClass.privateFunctions[i], true) << "{}" << '\n';
+	}
+
+	headerStream << "};" << '\n';
+
+	returnStrings.push_back(headerStream.str());
+	returnStrings.push_back(cppStream.str());
+	return returnStrings;
 }
 
 std::string Builder::buildVariable(PCStructs::clsVar variable) 
 {
-
-}
-
-
-std::string Builder::buildFunction(PCStructs::clsFunction function) {}
-
-std::string Builder::buildConstructor(PCStructs::clsConstructor constructor)
-{
 	std::stringstream outStream;
-	outStream << buildFunctionVars(constructor.constructorVars);
-	if(constructor.inherited)
-	{
-		outStream << ":" << buildFunctionVars(constructor.parentVars) << '\n';
-	}
-	else
-	{
-		outStream << '\n';
-	}
+	outStream << variable.typeCode << " " << variable.name;
 	return outStream.str();
 }
 
-std::string Builder::buildFunctionVars(std::vector<PCStructs::clsVar> vars)
+
+std::string Builder::buildFunction(PCStructs::clsFunction function, bool useName) 
 {
-	std::cout << "buildFunctionVars: " << '\n';
 	std::stringstream outStream;
-	
-	std::cout << "(";
+
+	outStream << function.name << buildFunctionVars(function.functionVars, useName); 
+
+	return outStream.str();
+}
+
+
+std::string Builder::buildFunctionVars(std::vector<PCStructs::clsVar> vars, bool useName)
+{
+	std::stringstream outStream;
 	outStream << "(";	
 	for(int i = 0; i < vars.size(); i++)
 	{
 		if(i == vars.size()-1)
 		{
-			std::cout << vars[i].typeCode;
 			outStream << vars[i].typeCode;
+			if(useName)
+			{
+				outStream << vars[i].name;
+			}
 		}
 		else
 		{
-			std::cout << vars[i].typeCode << ",";
-			outStream << vars[i].typeCode << ",";
+			outStream << vars[i].typeCode;
+			if(useName)
+			{
+				outStream << vars[i].name;
+			}
+			outStream << ", ";
 		}
 	}
-	std::cout << ")";
 	outStream << ")";
 	return outStream.str();
 }

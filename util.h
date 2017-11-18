@@ -24,7 +24,7 @@ namespace PCStructs {
 
     struct clsConstructor
     {
-        bool inherited;
+        bool inherited = false;;
         std::vector<clsVar> constructorVars;
 		std::vector<clsVar> parentVars;
     };
