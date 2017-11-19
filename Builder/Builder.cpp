@@ -89,8 +89,8 @@ std::vector<std::string> Builder::buildClass(PCStructs::myCls myClass)
 	}
 
 	// DESTRUCTOR
-	headerStream << '\t' << "~" << myClass.name << "();" << '\n';
-	cppStream << myClass.name << "::~"  << myClass.name << "() {}" << '\n';
+	headerStream << '\t' << "~" << myClass.name << "();" << '\n' << '\n';
+	cppStream << myClass.name << "::~"  << myClass.name << "() {}" << '\n' << '\n';
 
 	// VARIABLES
 	std::cout << "myClass.publicVars.size(): " << myClass.publicVars.size() << '\n';
@@ -102,8 +102,8 @@ std::vector<std::string> Builder::buildClass(PCStructs::myCls myClass)
 	// FUNCTIONS
 	for(int i = 0; i < myClass.publicFunctions.size(); i++)
 	{
-		headerStream << '\t' << myClass.publicFunctions[i].returnTypeCode << buildFunction(myClass.publicFunctions[i], false) << ';' << '\n';
-		cppStream << myClass.publicFunctions[i].returnTypeCode << " " <<  myClass.name << "::" << buildFunction(myClass.publicFunctions[i], true) << "{}" << '\n';  
+		headerStream << '\t' << myClass.publicFunctions[i].returnTypeCode << ' ' << buildFunction(myClass.publicFunctions[i], false) << ';' << '\n';
+		cppStream << myClass.publicFunctions[i].returnTypeCode << ' ' <<  myClass.name << "::" << buildFunction(myClass.publicFunctions[i], true) << "{}" << '\n' << '\n';  
 	}
 
 	// PRIVATE
@@ -118,8 +118,8 @@ std::vector<std::string> Builder::buildClass(PCStructs::myCls myClass)
 	// FUNCTIONS
 	for(int i = 0; i < myClass.privateFunctions.size(); i++)
 	{
-		headerStream << '\t' << myClass.privateFunctions[i].returnTypeCode << buildFunction(myClass.privateFunctions[i], false) << ';' << '\n';
-		cppStream << myClass.privateFunctions[i].returnTypeCode << " " << myClass.name << "::" << buildFunction(myClass.privateFunctions[i], true) << "{}" << '\n';
+		headerStream << '\t' << myClass.privateFunctions[i].returnTypeCode << ' ' << buildFunction(myClass.privateFunctions[i], false) << ';' << '\n';
+		cppStream << myClass.privateFunctions[i].returnTypeCode << ' ' << myClass.name << "::" << buildFunction(myClass.privateFunctions[i], true) << "{}" << '\n' << '\n';
 	}
 
 	headerStream << "};" << '\n';
@@ -158,7 +158,7 @@ std::string Builder::buildFunctionVars(std::vector<PCStructs::clsVar> vars, bool
 			outStream << vars[i].typeCode;
 			if(useName)
 			{
-				outStream << vars[i].name;
+				outStream << ' ' << vars[i].name;
 			}
 		}
 		else
@@ -166,7 +166,7 @@ std::string Builder::buildFunctionVars(std::vector<PCStructs::clsVar> vars, bool
 			outStream << vars[i].typeCode;
 			if(useName)
 			{
-				outStream << vars[i].name;
+				outStream << ' ' << vars[i].name;
 			}
 			outStream << ", ";
 		}
