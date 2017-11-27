@@ -12,12 +12,12 @@ public:
     Parser(std::ofstream*, std::ifstream*, ConfigLoader*);
     ~Parser();
 
-    void parseFile();
-    std::vector<PCStructs::myCls> getClasses();
+	void parseFile();
+    std::vector<PCStructs::myCls*> getClasses();
 
 private:
 	// All the classes in the file
-    std::vector<PCStructs::myCls> classes;
+    std::vector<PCStructs::myCls*> classes;
 	
 	// Returns clsFunction based on input
 	// INPUT: "    -int getDouble(int number)
